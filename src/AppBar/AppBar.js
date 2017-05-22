@@ -209,13 +209,18 @@ class AppBar extends Component {
     // If the title is a string, wrap in an h1 tag.
     // If not, wrap in a div tag.
     const titleComponent = typeof title === 'string' || title instanceof String ? 'h1' : 'div';
+    const titleId = typeof title === 'string' ? title + '-id' : 'id-title-id';
 
     const titleElement = React.createElement(titleComponent, {
       onTouchTap: this.handleTitleTouchTap,
+      id: titleId,
       style: prepareStyles(Object.assign(styles.title, styles.mainElement, titleStyle)),
     }, title);
 
     const iconLeftStyle = Object.assign({}, styles.iconButtonStyle, iconStyleLeft);
+    const iconButtonParent = this.props.title.length === 0 ? "App Bar" : this.props.title + " App Bar";
+    const appBarTitle = typeof title === 'string' ? title : '';
+    const appBarId='AppBar' + appBarTitle;
 
     if (showMenuIconButton) {
       if (iconElementLeft) {
@@ -250,6 +255,8 @@ class AppBar extends Component {
             iconStyle={styles.iconButtonIconStyle}
             iconClassName={iconClassNameLeft}
             onTouchTap={this.handleTouchTapLeftIconButton}
+            buttonAriaLabel={iconButtonParent + ' left side'}
+            labeledBy={titleId}
           >
             {iconClassNameLeft ?
               '' :
@@ -306,12 +313,15 @@ class AppBar extends Component {
           iconStyle={styles.iconButtonIconStyle}
           iconClassName={iconClassNameRight}
           onTouchTap={this.handleTouchTapRightIconButton}
+          buttonAriaLabel={iconButtonParent + ' right side'}
+          labeledBy={titleId}
         />
       );
     }
 
     return (
       <Paper
+        id={appBarId}
         {...other}
         rounded={false}
         className={className}
