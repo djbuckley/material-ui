@@ -519,6 +519,7 @@ class AutoComplete extends Component {
     return (
       <div style={prepareStyles(Object.assign(styles.root, style))} >
         <TextField
+          aria-label="textbox"
           ref="searchTextField"
           autoComplete="off"
           onBlur={this.handleBlur}
