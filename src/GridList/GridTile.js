@@ -110,6 +110,7 @@ class GridTile extends Component {
      * Title to be displayed on tile.
      */
     title: PropTypes.node,
+    alt: PropTypes.node,
     /**
      * Style used for title bar background.
      * Useful for setting custom gradients for example
@@ -190,6 +191,7 @@ class GridTile extends Component {
       ...other
     } = this.props;
 
+    const altName = this.props.title;
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
     const mergedRootStyles = Object.assign(styles.root, style);

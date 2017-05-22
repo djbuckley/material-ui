@@ -316,6 +316,7 @@ class EnhancedButton extends Component {
 
     const buttonProps = {
       ...other,
+      role: 'button',
       style: prepareStyles(mergedStyles),
       ref: (node) => this.button = node,
       disabled: disabled,

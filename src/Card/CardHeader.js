@@ -62,10 +62,6 @@ class CardHeader extends Component {
      */
     expandable: PropTypes.bool,
     /**
-     * Override the iconStyle of the Icon Button.
-     */
-    iconStyle: PropTypes.object,
-    /**
      * Can be used to pass a openIcon if you don't like the default expandable open Icon.
      */
     openIcon: PropTypes.node,
@@ -132,10 +128,10 @@ class CardHeader extends Component {
       title,
       titleColor, // eslint-disable-line no-unused-vars
       titleStyle,
-      iconStyle, // eslint-disable-line no-unused-vars
       ...other
     } = this.props;
 
+    const altName = this.props.title;
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
 
@@ -146,7 +142,7 @@ class CardHeader extends Component {
         style: Object.assign(styles.avatar, avatar.props.style),
       });
     } else if (avatar !== null) {
-      avatar = <Avatar src={avatarProp} style={styles.avatar} />;
+      avatar = <Avatar src={avatarProp} alt={altName} style={styles.avatar} />;
     }
 
     return (

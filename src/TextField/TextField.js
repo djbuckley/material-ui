@@ -461,6 +461,8 @@ class TextField extends Component {
     } else {
       inputElement = multiLine ? (
         <EnhancedTextarea
+          role="textbox"
+          aria-label="Multi Line Text Field"
           style={childStyleMerged}
           textareaStyle={Object.assign(styles.textarea, styles.inputNative, textareaStyle)}
           rows={rows}
@@ -472,6 +474,8 @@ class TextField extends Component {
         />
       ) : (
         <input
+          role="textbox"
+          aria-label="Text Field"
           type={type}
           style={prepareStyles(Object.assign(styles.inputNative, childStyleMerged))}
           {...other}

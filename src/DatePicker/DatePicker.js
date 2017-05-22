@@ -303,6 +303,8 @@ class DatePicker extends Component {
     return (
       <div className={className} style={prepareStyles(Object.assign({}, style))}>
         <TextField
+          role="textbox"
+          aria-label="Date Picker"
           {...other}
           onFocus={this.handleFocus}
           onTouchTap={this.handleTouchTap}

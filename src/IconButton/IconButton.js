@@ -116,6 +116,21 @@ class IconButton extends Component {
      * readability on mobile devices.
      */
     touch: PropTypes.bool,
+
+    /**
+     * values to be added into aria-label on the button
+     */
+    buttonAriaLabel: PropTypes.string,
+
+    /**
+     * value to be added into aria-labeledby
+     */
+    labeledBy: PropTypes.string,
+
+    /**
+     * value to be added into aria-describedby
+     */
+    describedBy: PropTypes.string,
   };
 
   static defaultProps = {
@@ -124,6 +139,9 @@ class IconButton extends Component {
     iconStyle: {},
     tooltipPosition: 'bottom-center',
     touch: false,
+    buttonAriaLabel: '',
+    labeledBy: ' ',
+    describedBy: ' ',
   };
 
   static contextTypes = {
@@ -241,9 +259,20 @@ class IconButton extends Component {
       tooltipStyles,
       touch,
       iconStyle,
+      buttonAriaLabel,
+      labeledBy,
+      describedBy,
       ...other
     } = this.props;
     let fonticon;
+
+
+    /* aria tags to associate this button with parent containers or nothing depending on how the call for this has been made */
+    const ariaBaseName = 'Icon Button';
+    const ariaLabel = this.props.buttonAriaLabel.length === 0 ? ariaBaseName : this.props.buttonAriaLabel + ' ' + ariaBaseName;
+    const toolTipIdValue = ariaLabel + '-tooltip';
+    const ariaLabeledBy = this.props.labeledBy.length === 0 ? ' ' : this.props.labeledBy ;
+    const ariaDescribedBy = this.props.describedBy.length === 0 ? toolTipId : this.props.describedBy ;
 
     const styles = getStyles(this.props, this.context);
     const tooltipPosition = tooltipPositionProp.split('-');
@@ -264,6 +293,7 @@ class IconButton extends Component {
         style={Object.assign(styles.tooltip, tooltipStyles)}
         verticalPosition={tooltipPosition[0]}
         horizontalPosition={tooltipPosition[1]}
+        toolTipId={toolTipIdValue}
       />
     ) : null;
 
@@ -293,6 +323,10 @@ class IconButton extends Component {
 
     return (
       <EnhancedButton
+        role="button"
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabeledBy}
+        aria-describedby={ariaDescribedBy}
         ref={(ref) => this.button = ref}
         {...other}
         centerRipple={true}

@@ -95,6 +95,7 @@ class Tooltip extends Component {
     style: PropTypes.object,
     touch: PropTypes.bool,
     verticalPosition: PropTypes.oneOf(['top', 'bottom']),
+    toolTipId: PropTypes.string,
   };
 
   static contextTypes = {
@@ -142,6 +143,7 @@ class Tooltip extends Component {
 
   render() {
     const {
+      toolTipId,
       horizontalPosition, // eslint-disable-line no-unused-vars
       label,
       show, // eslint-disable-line no-unused-vars
@@ -152,9 +154,13 @@ class Tooltip extends Component {
 
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
+    const idValue = this.props.toolTipId.length === 0 ? this.props.label + '-id' : this.props.toolTipId;
 
     return (
       <div
+        id={idValue}
+        role='tooltip'
+        aria-hidden='true'
         {...other}
         ref="tooltip"
         style={prepareStyles(Object.assign(

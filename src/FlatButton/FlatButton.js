@@ -290,6 +290,7 @@ class FlatButton extends Component {
 
     return (
       <EnhancedButton
+        aria-label="Flat Button"
         {...other}
         disabled={disabled}
         focusRippleColor={buttonRippleColor}
