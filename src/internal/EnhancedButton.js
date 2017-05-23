@@ -38,6 +38,7 @@ function listenForTabPresses() {
 
 class EnhancedButton extends Component {
   static propTypes = {
+    id: PropTypes.string,
     centerRipple: PropTypes.bool,
     children: PropTypes.node,
     containerElement: PropTypes.oneOfType([
@@ -92,6 +93,9 @@ class EnhancedButton extends Component {
     if (!disabled && keyboardFocused && !disableKeyboardFocus) {
       this.setState({isKeyboardFocused: true});
     }
+
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   componentDidMount() {
@@ -248,6 +252,7 @@ class EnhancedButton extends Component {
 
   render() {
     const {
+      id,
       centerRipple, // eslint-disable-line no-unused-vars
       children,
       containerElement,
@@ -273,6 +278,8 @@ class EnhancedButton extends Component {
       type,
       ...other
     } = this.props;
+
+    const baseId = id || this.uniqueId;
 
     const {
       prepareStyles,
@@ -328,6 +335,7 @@ class EnhancedButton extends Component {
       onKeyDown: this.handleKeyDown,
       onTouchTap: this.handleTouchTap,
       tabIndex: disabled || disableKeyboardFocus ? -1 : tabIndex,
+      id: baseId,
     };
 
     const buttonChildren = this.createButtonChildren();

@@ -82,6 +82,7 @@ function getStyles(props, context, state) {
 
 class Tooltip extends Component {
   static propTypes = {
+    id: PropTypes.string,
     /**
      * The css class name of the root element.
      */
@@ -95,7 +96,6 @@ class Tooltip extends Component {
     style: PropTypes.object,
     touch: PropTypes.bool,
     verticalPosition: PropTypes.oneOf(['top', 'bottom']),
-    toolTipId: PropTypes.string,
   };
 
   static contextTypes = {
@@ -105,6 +105,11 @@ class Tooltip extends Component {
   state = {
     offsetWidth: null,
   };
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${this.props.horizontalPosition}-${this.props.verticalPosition}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
 
   componentDidMount() {
     this.setRippleSize();
@@ -143,7 +148,7 @@ class Tooltip extends Component {
 
   render() {
     const {
-      toolTipId,
+      id,
       horizontalPosition, // eslint-disable-line no-unused-vars
       label,
       show, // eslint-disable-line no-unused-vars
@@ -152,13 +157,13 @@ class Tooltip extends Component {
       ...other
     } = this.props;
 
+    const baseId = id || this.uniqueId;
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
-    const idValue = this.props.toolTipId.length === 0 ? this.props.label + '-id' : this.props.toolTipId;
 
     return (
       <div
-        id={idValue}
+        id={baseId}
         role='tooltip'
         aria-hidden='true'
         {...other}

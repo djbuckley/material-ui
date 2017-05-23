@@ -71,6 +71,7 @@ function getStyles(props, context) {
 
 class EnhancedSwitch extends Component {
   static propTypes = {
+    id: PropTypes.string,
     checked: PropTypes.bool,
     className: PropTypes.string,
     defaultChecked: PropTypes.bool,
@@ -117,6 +118,11 @@ class EnhancedSwitch extends Component {
       this.props.onParentShouldUpdate) {
       this.props.onParentShouldUpdate(inputNode.checked);
     }
+  }
+
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${this.props.labelPosition}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -251,6 +257,7 @@ class EnhancedSwitch extends Component {
 
   render() {
     const {
+      id,
       name,
       value,
       iconStyle,
@@ -287,13 +294,25 @@ class EnhancedSwitch extends Component {
     const wrapStyles = Object.assign(styles.wrap, iconStyle);
     const mergedRippleStyle = Object.assign(styles.ripple, rippleStyle);
 
+    const baseId = id || this.uniqueId;
+    const labelId = baseId + '-label';
+    const touchRippleId = baseId + '-touchRipple';
+    const focusRippleId = baseId + '-focusRipple';
+    const checkBoxId = baseId + '-checkBox';
+    const thumbStyleId = baseId + '-thumbStyle';
+    const wrapStyleId = baseId + '-wrapStyle';
+    const trackStyleId = baseId + '-trackStyle';
+    const paperStyleId = baseId + '-paperStyle';
+    const styleControlId = baseId + '-styleControl';
+
+
     if (thumbStyle) {
       wrapStyles.marginLeft /= 2;
       wrapStyles.marginRight /= 2;
     }
 
     const labelElement = label && (
-      <label style={prepareStyles(Object.assign(styles.label, labelStyle))}>
+      <label id={labelId} style={prepareStyles(Object.assign(styles.label, labelStyle))}>
         {label}
       </label>
     );
@@ -303,6 +322,7 @@ class EnhancedSwitch extends Component {
 
     const touchRipple = (
       <TouchRipple
+        id={touchRippleId}
         ref="touchRipple"
         key="touchRipple"
         style={mergedRippleStyle}
@@ -314,6 +334,7 @@ class EnhancedSwitch extends Component {
 
     const focusRipple = (
       <FocusRipple
+        id={focusRippleId}
         key="focusRipple"
         innerStyle={mergedRippleStyle}
         color={mergedRippleStyle.color}
@@ -329,6 +350,9 @@ class EnhancedSwitch extends Component {
 
     const inputElement = (
       <input
+        id={checkBoxId}
+        role='checkbox'
+        aria-label='checkbox'
         {...other}
         ref="checkbox"
         type={inputType}
@@ -350,31 +374,31 @@ class EnhancedSwitch extends Component {
     // If toggle component (indicated by whether the style includes thumb) manually lay out
     // elements in order to nest ripple elements
     const switchOrThumbElement = !thumbStyle ? (
-      <div style={prepareStyles(wrapStyles)}>
+      <div id={thumbStyleId} style={prepareStyles(wrapStyles)}>
         {switchElement}
         {ripples}
       </div>
     ) : (
-      <div style={prepareStyles(wrapStyles)}>
-        <div style={prepareStyles(Object.assign({}, trackStyle))} />
-        <Paper style={thumbStyle} zDepth={1} circle={true}> {ripples} </Paper>
+      <div id={wrapStyleId} style={prepareStyles(wrapStyles)}>
+        <div id={trackStyleId} style={prepareStyles(Object.assign({}, trackStyle))} />
+        <Paper id={paperStyleId} style={thumbStyle} zDepth={1} circle={true}> {ripples} </Paper>
       </div>
     );
 
     const elementsInOrder = labelPosition === 'right' ? (
-      <div style={styles.controls}>
+      <div id={styleControlId} style={styles.controls}>
         {switchOrThumbElement}
         {labelElement}
       </div>
     ) : (
-      <div style={styles.controls}>
+      <div id={styleControlId} style={styles.controls}>
         {labelElement}
         {switchOrThumbElement}
       </div>
     );
 
     return (
-      <div ref="root" className={className} style={prepareStyles(Object.assign(styles.root, style))}>
+      <div id={baseId} ref="root" className={className} style={prepareStyles(Object.assign(styles.root, style))}>
         <EventListener
           target="window"
           onKeyDown={this.handleKeyDown}
