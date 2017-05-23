@@ -39,6 +39,7 @@ class CalendarActionButton extends Component {
           onTouchTap={this.props.onTouchTapCancel}
           primary={true}
           style={styles.flatButtons}
+          keyboardFocused={true}
         />
         {!this.props.autoOk &&
           <FlatButton

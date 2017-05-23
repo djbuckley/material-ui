@@ -10,6 +10,10 @@ import {dateTimeFormat} from './dateUtils';
 
 class DatePickerDialog extends Component {
   static propTypes = {
+    /**
+     * The id prop for the component.
+     */
+    id: PropTypes.string,
     DateTimeFormat: PropTypes.func,
     animation: PropTypes.func,
     autoOk: PropTypes.bool,
@@ -41,6 +45,11 @@ class DatePickerDialog extends Component {
     locale: 'en-US',
     okLabel: 'OK',
   };
+
+  componentWillMount() {
+    const uniqueId = `DatePickerDialog-${this.props.container}-${this.props.mode}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
 
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired,
@@ -93,15 +102,23 @@ class DatePickerDialog extends Component {
   };
 
   handleWindowKeyUp = (event) => {
-    switch (keycode(event)) {
-      case 'enter':
-        this.handleTouchTapOk();
-        break;
-    }
+    console.log(keycode(event));
+      if(this.state.open)
+      {
+        switch (keycode(event)) {
+          case 'enter':
+            this.handleTouchTapOk();
+            break;
+          case 'esc':
+            this.handleRequestClose();
+            break;
+          }
+      }
   };
 
   render() {
     const {
+      id,
       DateTimeFormat,
       autoOk,
       cancelLabel,
@@ -140,9 +157,13 @@ class DatePickerDialog extends Component {
     };
 
     const Container = (container === 'inline' ? Popover : Dialog);
+    const componentId = id || this.uniqueId;
+    const divId = componentId + '-div';
+    const containerId = componentId + '-' + container + 'Container';
+    const calendarId = componentId + '-calendar';
 
     return (
-      <div {...other} ref="root">
+      <div {...other} ref="root" id={divId}>
         <Container
           anchorEl={this.refs.root} // For Popover
           animation={animation || PopoverAnimationVertical} // For Popover
@@ -153,12 +174,14 @@ class DatePickerDialog extends Component {
           open={open}
           onRequestClose={this.handleRequestClose}
           style={Object.assign(styles.dialogBodyContent, containerStyle)}
+          id={containerId}
         >
           <EventListener
-            target="window"
+            target={divId}
             onKeyUp={this.handleWindowKeyUp}
           />
           <Calendar
+            id={calendarId}
             autoOk={autoOk}
             DateTimeFormat={DateTimeFormat}
             cancelLabel={cancelLabel}
