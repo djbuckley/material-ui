@@ -36,6 +36,10 @@ class IconButton extends Component {
 
   static propTypes = {
     /**
+     * The id prop for the component.
+     */
+    id: PropTypes.string,
+    /**
      * Can be used to pass a `FontIcon` element as the icon for the button.
      */
     children: PropTypes.node,
@@ -148,6 +152,11 @@ class IconButton extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
   state = {
     hovered: false,
     isKeyboardFocused: false,
@@ -248,6 +257,7 @@ class IconButton extends Component {
 
   render() {
     const {
+      id,
       disabled,
       hoveredStyle,
       disableTouchRipple,
@@ -266,11 +276,12 @@ class IconButton extends Component {
     } = this.props;
     let fonticon;
 
+    const baseId = id || this.uniqueId;
 
     /* aria tags to associate this button with parent containers or nothing depending on how the call for this has been made */
     const ariaBaseName = 'Icon Button';
     const ariaLabel = this.props.buttonAriaLabel.length === 0 ? ariaBaseName : this.props.buttonAriaLabel + ' ' + ariaBaseName;
-    const toolTipIdValue = ariaLabel + '-tooltip';
+    const toolTipIdValue = baseId + '-tooltip';
     const ariaLabeledBy = this.props.labeledBy.length === 0 ? ' ' : this.props.labeledBy ;
     const ariaDescribedBy = this.props.describedBy.length === 0 ? toolTipId : this.props.describedBy ;
 
@@ -293,7 +304,7 @@ class IconButton extends Component {
         style={Object.assign(styles.tooltip, tooltipStyles)}
         verticalPosition={tooltipPosition[0]}
         horizontalPosition={tooltipPosition[1]}
-        toolTipId={toolTipIdValue}
+        id={toolTipIdValue}
       />
     ) : null;
 
@@ -323,6 +334,7 @@ class IconButton extends Component {
 
     return (
       <EnhancedButton
+        id={baseId}
         role="button"
         aria-label={ariaLabel}
         aria-labelledby={ariaLabeledBy}
