@@ -27,6 +27,7 @@ function getStyles(props) {
 
 const TextFieldLabel = (props) => {
   const {
+    id,
     muiTheme,
     className,
     children,
@@ -37,8 +38,12 @@ const TextFieldLabel = (props) => {
   const {prepareStyles} = muiTheme;
   const styles = getStyles(props);
 
+  const uniqueId = `TextFieldLabel-${className}-${Math.floor(Math.random() * 0xFFFF)}`;
+  const baseId = id || uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+
   return (
     <label
+      id={baseId}
       className={className}
       style={prepareStyles(styles.root)}
       htmlFor={htmlFor}
@@ -50,6 +55,10 @@ const TextFieldLabel = (props) => {
 };
 
 TextFieldLabel.propTypes = {
+  /**
+   * the id of the element in the rendered document
+   */
+  id: PropTypes.string,
   /**
    * The label contents.
    */

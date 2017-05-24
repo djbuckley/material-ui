@@ -148,7 +148,7 @@ class EnhancedButton extends Component {
     }
   }
 
-  createButtonChildren() {
+  createButtonChildren(idBase) {
     const {
       centerRipple,
       children,
@@ -162,10 +162,13 @@ class EnhancedButton extends Component {
       touchRippleOpacity,
     } = this.props;
     const {isKeyboardFocused} = this.state;
+    const focusRippleId = idBase + '-focusRipple';
+    const touchRippleId = idBase + '-touchRipple';
 
     // Focus Ripple
     const focusRipple = isKeyboardFocused && !disabled && !disableFocusRipple && !disableKeyboardFocus ? (
       <FocusRipple
+        id={focusRippleId}
         color={focusRippleColor}
         opacity={focusRippleOpacity}
         show={isKeyboardFocused}
@@ -175,6 +178,7 @@ class EnhancedButton extends Component {
     // Touch Ripple
     const touchRipple = !disabled && !disableTouchRipple ? (
       <TouchRipple
+        id={touchRippleId}
         centerRipple={centerRipple}
         color={touchRippleColor}
         opacity={touchRippleOpacity}
@@ -338,7 +342,7 @@ class EnhancedButton extends Component {
       id: baseId,
     };
 
-    const buttonChildren = this.createButtonChildren();
+    const buttonChildren = this.createButtonChildren(baseId);
 
     if (React.isValidElement(containerElement)) {
       return React.cloneElement(containerElement, buttonProps, buttonChildren);

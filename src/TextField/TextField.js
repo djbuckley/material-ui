@@ -281,8 +281,8 @@ class TextField extends Component {
     warning(name || hintText || floatingLabelText || id, `Material-UI: We don't have enough information
       to build a robust unique id for the TextField component. Please provide an id or a name.`);
 
-    const uniqueId = `${name}-${hintText}-${floatingLabelText}-${
-      Math.floor(Math.random() * 0xFFFF)}`;
+    const lineType = this.props.multiLine ? 'multiLine' : 'singleLine';
+    const uniqueId = `${this.constructor.name}-${lineType}-${Math.floor(Math.random() * 0xFFFF)}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
@@ -415,6 +415,10 @@ class TextField extends Component {
     const {prepareStyles} = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
     const inputId = id || this.uniqueId;
+    const textFieldLabelId = inputId + '-TextFieldLabel';
+    const textFieldHintId = inputId + '-TextFieldHint';
+    const textFieldUnderlineId = inputId + '-TextFieldUnderline';
+    const enhancedTextareaId = inputId + '-EnhancedTextarea';
 
     const errorTextElement = this.state.errorText && (
       <div style={prepareStyles(Object.assign(styles.error, errorStyle))}>
@@ -424,6 +428,7 @@ class TextField extends Component {
 
     const floatingLabelTextElement = floatingLabelText && (
       <TextFieldLabel
+        id={textFieldLabelId}
         muiTheme={this.context.muiTheme}
         style={Object.assign(
           styles.floatingLabel,
@@ -449,6 +454,10 @@ class TextField extends Component {
     };
 
     const childStyleMerged = Object.assign(styles.input, inputStyle);
+    const ariaLabel = (multiLine ? 'Multi Line ' : '') + 'Text Field';
+    /* if theres a floating label set the aria labelled by to it, if not set it to the hint text if that exists... otherwise null */
+    const ariaLabelledBy = floatingLabelText ? textFieldLabelId : (hintText ? textFieldHintId : null);
+    const roleLabel = 'textbox';
 
     let inputElement;
     if (children) {
@@ -461,21 +470,25 @@ class TextField extends Component {
     } else {
       inputElement = multiLine ? (
         <EnhancedTextarea
-          role="textbox"
-          aria-label="Multi Line Text Field"
+          id={enhancedTextareaId}
+          role={roleLabel}
+          aria-label={ariaLabel}
           style={childStyleMerged}
           textareaStyle={Object.assign(styles.textarea, styles.inputNative, textareaStyle)}
           rows={rows}
           rowsMax={rowsMax}
           hintText={hintText}
+          labelledBy={ariaLabelledBy}
           {...other}
           {...inputProps}
           onHeightChange={this.handleHeightChange}
         />
       ) : (
         <input
-          role="textbox"
-          aria-label="Text Field"
+          id={enhancedTextareaId}
+          role={roleLabel}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
           type={type}
           style={prepareStyles(Object.assign(styles.inputNative, childStyleMerged))}
           {...other}
@@ -492,6 +505,7 @@ class TextField extends Component {
 
     return (
       <div
+        id={inputId}
         {...rootProps}
         className={className}
         style={prepareStyles(Object.assign(styles.root, style))}
@@ -499,6 +513,7 @@ class TextField extends Component {
         {floatingLabelTextElement}
         {hintText ?
           <TextFieldHint
+            id={textFieldHintId}
             muiTheme={this.context.muiTheme}
             show={!(this.state.hasValue || (floatingLabelText && !this.state.isFocused)) ||
                   (!this.state.hasValue && floatingLabelText && floatingLabelFixed && !this.state.isFocused)}
@@ -510,6 +525,7 @@ class TextField extends Component {
         {inputElement}
         {underlineShow ?
           <TextFieldUnderline
+            id={textFieldUnderlineId}
             disabled={disabled}
             disabledStyle={underlineDisabledStyle}
             error={!!this.state.errorText}

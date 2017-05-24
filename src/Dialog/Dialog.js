@@ -247,6 +247,8 @@ class DialogInline extends Component {
 
     if (this.props.onRequestClose) {
       this.props.onRequestClose(!!buttonClicked);
+      const ActiveElement = window.prevActiveElement;
+      ActiveElement.focus();
     }
   }
 
@@ -265,6 +267,8 @@ class DialogInline extends Component {
   };
 
   render() {
+    window.prevActiveElement = document.activeElement;
+
     const {
       actions,
       actionsContainerClassName,

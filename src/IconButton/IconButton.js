@@ -127,9 +127,9 @@ class IconButton extends Component {
     buttonAriaLabel: PropTypes.string,
 
     /**
-     * value to be added into aria-labeledby
+     * value to be added into aria-labelledby
      */
-    labeledBy: PropTypes.string,
+    labelledBy: PropTypes.string,
 
     /**
      * value to be added into aria-describedby
@@ -144,8 +144,8 @@ class IconButton extends Component {
     tooltipPosition: 'bottom-center',
     touch: false,
     buttonAriaLabel: '',
-    labeledBy: ' ',
-    describedBy: ' ',
+    labelledBy: '',
+    describedBy: '',
   };
 
   static contextTypes = {
@@ -270,7 +270,7 @@ class IconButton extends Component {
       touch,
       iconStyle,
       buttonAriaLabel,
-      labeledBy,
+      labelledBy,
       describedBy,
       ...other
     } = this.props;
@@ -282,8 +282,8 @@ class IconButton extends Component {
     const ariaBaseName = 'Icon Button';
     const ariaLabel = this.props.buttonAriaLabel.length === 0 ? ariaBaseName : this.props.buttonAriaLabel + ' ' + ariaBaseName;
     const toolTipIdValue = baseId + '-tooltip';
-    const ariaLabeledBy = this.props.labeledBy.length === 0 ? ' ' : this.props.labeledBy ;
-    const ariaDescribedBy = this.props.describedBy.length === 0 ? toolTipId : this.props.describedBy ;
+    const ariaLabelledBy = this.props.labelledBy.length === 0 ? null : this.props.labelledBy ;
+    const ariaDescribedBy = this.props.describedBy.length === 0 ? null : this.props.describedBy ;
 
     const styles = getStyles(this.props, this.context);
     const tooltipPosition = tooltipPositionProp.split('-');
@@ -337,7 +337,7 @@ class IconButton extends Component {
         id={baseId}
         role="button"
         aria-label={ariaLabel}
-        aria-labelledby={ariaLabeledBy}
+        aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}
         ref={(ref) => this.button = ref}
         {...other}

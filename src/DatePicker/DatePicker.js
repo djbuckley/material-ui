@@ -182,7 +182,7 @@ class DatePicker extends Component {
       date: this.isControlled() ? this.getControlledDate() : this.props.defaultDate,
     });
 
-    const uniqueId = `DatePicker-${this.props.mode}-${Math.floor(Math.random() * 0xFFFF)}`;
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
     this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
   }
 
@@ -240,7 +240,6 @@ class DatePicker extends Component {
   };
 
   handleFocus = (event) => {
-    //event.target.blur();
     if (this.props.onFocus) {
       this.props.onFocus(event);
     }

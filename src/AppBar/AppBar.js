@@ -67,6 +67,10 @@ class AppBar extends Component {
 
   static propTypes = {
     /**
+     * The id prop for the component.
+     */
+    id: PropTypes.string,
+    /**
      * Can be used to render a tab inside an app bar for instance.
      */
     children: PropTypes.node,
@@ -153,6 +157,11 @@ class AppBar extends Component {
     muiTheme: PropTypes.object.isRequired,
   };
 
+  componentWillMount() {
+    const uniqueId = `${this.constructor.name}-${Math.floor(Math.random() * 0xFFFF)}`;
+    this.uniqueId = uniqueId.replace(/[^A-Za-z0-9-]/gi, '');
+  }
+
   componentDidMount() {
     warning(!this.props.iconElementLeft || !this.props.iconClassNameLeft, `Material-UI: Properties iconElementLeft
       and iconClassNameLeft cannot be simultaneously defined. Please use one or the other.`);
@@ -181,6 +190,7 @@ class AppBar extends Component {
 
   render() {
     const {
+      id,
       title,
       titleStyle,
       iconStyleLeft,
@@ -206,10 +216,12 @@ class AppBar extends Component {
     let menuElementLeft;
     let menuElementRight;
 
+    const baseId = id || this.uniqueId;
+
     // If the title is a string, wrap in an h1 tag.
     // If not, wrap in a div tag.
     const titleComponent = typeof title === 'string' || title instanceof String ? 'h1' : 'div';
-    const titleId = typeof title === 'string' ? title + '-id' : 'id-title-id';
+    const titleId = baseId + '-' + (typeof title === 'string' ? title + '-id' : 'id-title-id');
 
     const titleElement = React.createElement(titleComponent, {
       onTouchTap: this.handleTitleTouchTap,
@@ -220,7 +232,7 @@ class AppBar extends Component {
     const iconLeftStyle = Object.assign({}, styles.iconButtonStyle, iconStyleLeft);
     const iconButtonParent = this.props.title.length === 0 ? "App Bar" : this.props.title + " App Bar";
     const appBarTitle = typeof title === 'string' ? title : '';
-    const appBarId='AppBar' + appBarTitle;
+    const appBarId= baseId + '-' + appBarTitle;
 
     if (showMenuIconButton) {
       if (iconElementLeft) {
@@ -256,7 +268,7 @@ class AppBar extends Component {
             iconClassName={iconClassNameLeft}
             onTouchTap={this.handleTouchTapLeftIconButton}
             buttonAriaLabel={iconButtonParent + ' left side'}
-            labeledBy={titleId}
+            labelledBy={titleId}
           >
             {iconClassNameLeft ?
               '' :
@@ -314,7 +326,7 @@ class AppBar extends Component {
           iconClassName={iconClassNameRight}
           onTouchTap={this.handleTouchTapRightIconButton}
           buttonAriaLabel={iconButtonParent + ' right side'}
-          labeledBy={titleId}
+          labelledBy={titleId}
         />
       );
     }
