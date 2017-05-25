@@ -73,7 +73,9 @@ class DatePicker extends Component {
      */
     hideCalendarDate: PropTypes.bool,
     /**
-     * The id prop for the component.
+     * The id value used for the component.
+     * This will be used as a base for all child components also.
+     * If not provided the class name along with appropriate properties and a random number will be used.
      */
     id: PropTypes.string,
     /**

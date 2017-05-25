@@ -165,7 +165,15 @@ class TextField extends Component {
      */
     hintText: PropTypes.node,
     /**
-     * The id prop for the text field.
+     * The id value used for the hint text part of the component.
+     * If not provided a value will be derived from the id property.
+     * Use this if linking to the hint text is required.
+     */
+    hintTextId: PropTypes.string,
+    /**
+     * The id value used for the component.
+     * This will be used as a base for all child components also.
+     * If not provided the class name along with appropriate properties and a random number will be used.
      */
     id: PropTypes.string,
     /**
@@ -393,6 +401,7 @@ class TextField extends Component {
       floatingLabelText,
       fullWidth, // eslint-disable-line no-unused-vars
       hintText,
+      hintTextId,
       hintStyle,
       id,
       inputStyle,
@@ -416,7 +425,7 @@ class TextField extends Component {
     const styles = getStyles(this.props, this.context, this.state);
     const inputId = id || this.uniqueId;
     const textFieldLabelId = inputId + '-TextFieldLabel';
-    const textFieldHintId = inputId + '-TextFieldHint';
+    const textFieldHintId = hintTextId || inputId + '-TextFieldHint';
     const textFieldUnderlineId = inputId + '-TextFieldUnderline';
     const enhancedTextareaId = inputId + '-EnhancedTextarea';
 
@@ -468,6 +477,7 @@ class TextField extends Component {
           style: Object.assign(childStyleMerged, children.props.style),
         });
     } else {
+
       inputElement = multiLine ? (
         <EnhancedTextarea
           id={enhancedTextareaId}

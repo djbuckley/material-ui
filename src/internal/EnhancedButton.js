@@ -284,6 +284,7 @@ class EnhancedButton extends Component {
     } = this.props;
 
     const baseId = id || this.uniqueId;
+    const spanId = baseId + '-span';
 
     const {
       prepareStyles,
@@ -317,6 +318,7 @@ class EnhancedButton extends Component {
     if (disabled && href) {
       return (
         <span
+          id={spanId}
           {...other}
           style={mergedStyles}
         >

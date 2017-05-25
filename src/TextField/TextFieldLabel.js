@@ -44,6 +44,7 @@ const TextFieldLabel = (props) => {
   return (
     <label
       id={baseId}
+      role='Tooltip'
       className={className}
       style={prepareStyles(styles.root)}
       htmlFor={htmlFor}
@@ -56,7 +57,9 @@ const TextFieldLabel = (props) => {
 
 TextFieldLabel.propTypes = {
   /**
-   * the id of the element in the rendered document
+   * The id value used for the component.
+   * This will be used as a base for all child components also.
+   * If not provided the class name along with appropriate properties and a random number will be used.
    */
   id: PropTypes.string,
   /**

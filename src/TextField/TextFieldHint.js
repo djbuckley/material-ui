@@ -47,7 +47,9 @@ const TextFieldHint = (props) => {
 
 TextFieldHint.propTypes = {
   /**
-   * the id of the element in the rendered document
+   * The id value used for the component.
+   * This will be used as a base for all child components also.
+   * If not provided the class name along with appropriate properties and a random number will be used.
    */
   id: PropTypes.string,
   /**
