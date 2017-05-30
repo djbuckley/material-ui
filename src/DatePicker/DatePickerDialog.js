@@ -157,10 +157,12 @@ class DatePickerDialog extends Component {
     };
 
     const Container = (container === 'inline' ? Popover : Dialog);
+    const modal = (container === 'inline' ? null : true);
     const componentId = id || this.uniqueId;
     const divId = componentId + '-div';
     const containerId = componentId + '-' + container + 'Container';
     const calendarId = componentId + '-calendar';
+    const eventTarget = modal ? divId : 'window';
 
     return (
       <div {...other} ref="root" id={divId}>
@@ -175,9 +177,10 @@ class DatePickerDialog extends Component {
           onRequestClose={this.handleRequestClose}
           style={Object.assign(styles.dialogBodyContent, containerStyle)}
           id={containerId}
+          modal={modal}
         >
           <EventListener
-            target={divId}
+            target={eventTarget}
             onKeyUp={this.handleWindowKeyUp}
           />
           <Calendar
