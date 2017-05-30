@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import EventListener from 'react-event-listener';
@@ -287,7 +288,7 @@ class DatePicker extends Component {
    * Only do this if the date picker is actually enabled though.
    */
   handleKeyEvent = (event) => {
-    if(!this.props.disabled && keycode(event) === 'enter') {
+    if(!this.props.disabled && (keycode(event) === 'enter' || keycode(event) === 'space')) {
       this.openDialog();
     }
   };
